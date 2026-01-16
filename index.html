@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D’Pongs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        nav h1 {
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        nav a:hover, nav a.active {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* HOME PAGE */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('cover3.jpg') center/cover;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-content h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn:hover {
+            background: #764ba2;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #667eea;
+            text-align: center;
+        }
+
+        .intro-text {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        /* FEATURE BOX BACKGROUND FOTO */
+#home .feature-box{
+    position:relative;
+    min-height:260px;
+    padding:2rem;
+    border-radius:16px;
+    color:#fff;
+    background-size:cover;
+    background-position:center;
+    box-shadow:0 8px 20px rgba(0,0,0,.25);
+    overflow:hidden;
+    transition:.3s;
+}
+#home .feature-box::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,.45);
+}
+#home .feature-box *{
+    position:relative;
+    z-index:1;
+}
+#home .feature-box:hover{
+    transform:scale(1.05);
+}
+
+/* BACKGROUND PER BOX */
+#home .feature-box:nth-child(1){background-image:url("pemandangan.jpeg");}
+#home .feature-box:nth-child(2){background-image:url("spot.jpg");}
+#home .feature-box:nth-child(3){background-image:url("resto.jpg");}
+#home .feature-box:nth-child(4){background-image:url("pohon.jpg");}
+
+        /* TENTANG PAGE */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .about-image {
+            width: 100%;
+            height: 400px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .about-text p {
+            margin-bottom: 1rem;
+            text-align: justify;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .stat-box {
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        /* GALERI PAGE */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .gallery-item {
+            width: 100%;
+            height: 350px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            overflow: hidden;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+
+         /* MODAL FOTO */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 35px;
+            cursor: pointer;
+        }
+
+        /* KONTAK PAGE */
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .contact-form {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .info-box {
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-box h3 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-box p {
+            color: #666;
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .hero-content h2 {
+                font-size: 2rem;
+            }
+
+            .about-content,
+            .contact-content {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <h1 onclick="showPage('home')"> D'Pongs</h1>
+            <ul>
+                <li><a onclick="showPage('home')" class="nav-link active">Beranda</a></li>
+                <li><a onclick="showPage('tentang')" class="nav-link">Tentang</a></li>
+                <li><a onclick="showPage('galeri')" class="nav-link">Galeri</a></li>
+                <li><a onclick="showPage('paket')" class="nav-link">Paket Wisata</a></li>
+                <li><a onclick="showPage('kontak')" class="nav-link">Kontak</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- HOME PAGE -->
+    <div id="home" class="page active">
+        <section class="hero">
+            <div class="hero-content">
+                <h2>Selamat Datang di D'Pongs</h2>
+                <p>Jelajahi keindahan alam dan wahana yang seru</p>
+                <button class="btn" onclick="showPage('tentang')">Selengkapnya</button>
+            </div>
+        </section>
+
+        <div class="container">
+            <h2 class="section-title">Mengapa Berkunjung ke Sini?</h2>
+            <p class="intro-text">Temukan pengalaman wisata yang tak terlupakan dengan berbagai fasilitas dan aktivitas menarik yang kami tawarkan.</p>
+            
+            <div class="features-grid">
+                <div class="feature-box">
+                    <h3>Pemandangan Indah</h3>
+                    <p>Nikmati keindahan alam yang memukau dan menenangkan</p>
+                </div>
+                <div class="feature-box">
+                    <h3>Spot Foto Instagramable</h3>
+                    <p>Berbagai spot foto menarik untuk mengabadikan momen</p>
+                </div>
+                <div class="feature-box">
+                    <h3>Kuliner Lokal</h3>
+                    <p>Cicipi kelezatan masakan khas daerah</p>
+                </div>
+                <div class="feature-box">
+                    <h3>Ramah Keluarga</h3>
+                    <p>Cocok untuk wisata bersama keluarga dan teman</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TENTANG PAGE -->
+    <div id="tentang" class="page">
+        <div class="container">
+            <h2 class="section-title">Tentang D'Pongs</h2>
+            </h2>
+            
+            <div class="about-content">
+                <div class="about-image">
+                    <img src="kuda.jpeg" alt="Foto Destinasi">
+                </div>
+                <div class="about-text">
+                    <h3 style="color: #667eea; margin-bottom: 1rem; font-size: 1.8rem;">Keunikan</h3>
+                    <p>Wisata Keluarga D’Pongs adalah destinasi rekreasi dengan suasana alam yang asri dan nyaman, cocok untuk liburan bersama keluarga. Dilengkapi berbagai wahana seru, area kuliner, dan spot foto menarik, D’Pongs menjadi pilihan tepat untuk menikmati waktu berkualitas dan menciptakan momen kebersamaan yang berkesan.</p>
+                </div>
+            </div>
+
+            <h3 style="color: #667eea; margin: 3rem 0 2rem; font-size: 2rem; text-align: center;">Fasilitas Tersedia</h3>
+            <div class="features-grid">
+                <div class="feature-box">
+                    <div style="width: 100%; height: 150px; border-radius: 8px; overflow: hidden; margin-bottom: 1rem;">
+                        <img src="parkir.jpg" alt="Area Parkir" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <h3>Parkir Luas</h3>
+                    <p>Area parkir yang aman dan luas</p>
+                </div>
+                <div class="feature-box">
+                    <div style="width: 100%; height: 150px; border-radius: 8px; overflow: hidden; margin-bottom: 1rem;">
+                        <img src="toilet.jpg" alt="Toilet Bersih" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <h3>Toilet Bersih</h3>
+                    <p>Fasilitas toilet yang bersih dan terawat</p>
+                </div>
+                <div class="feature-box">
+                    <div style="width: 100%; height: 150px; border-radius: 8px; overflow: hidden; margin-bottom: 1rem;">
+                        <img src="penginapan.jpg" alt="Musholla" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <h3>Penginapan</h3>
+                    <p>Tempat istirahat yang nyaman</p>
+                </div>
+                <div class="feature-box">
+                    <div style="width: 100%; height: 150px; border-radius: 8px; overflow: hidden; margin-bottom: 1rem;">
+                        <img src="resto.jpg" alt="Kafe dan Warung" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <h3>Restoran</h3>
+                    <p>Berbagai pilihan kuliner tersedia</p>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-number">150</div>
+                    <div>Pengunjung per Bulan</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">4</div>
+                    <div>Spot Foto Menarik</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">4.0</div>
+                    <div>Rating Pengunjung</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GALERI PAGE -->
+    <div id="galeri" class="page">
+        <div class="container">
+            <h2 class="section-title">Galeri Foto</h2>
+            <p class="intro-text">Jelajahi koleksi foto-foto indah dari berbagai sudut destinasi wisata kami</p>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="kuda.jpeg" alt="Galeri Foto 1">
+                </div>
+                <div class="gallery-item">
+                    <img src="kelinci.jpg" alt="Galeri Foto 2">
+                </div>
+                <div class="gallery-item">
+                    <img src="pohon.jpg" alt="Galeri Foto 3">
+                </div>
+                <div class="gallery-item">
+                    <img src="spot.jpg" alt="Galeri Foto 4">
+                </div>
+                <div class="gallery-item">
+                    <img src="fox.jpg" alt="Galeri Foto 5">
+                </div>
+                <div class="gallery-item">
+                    <img src="kolam.jpg" alt="Galeri Foto 6">
+                </div>
+                <div class="gallery-item">
+                    <img src="hewan.jpg" alt="Galeri Foto 7">
+                </div>
+                <div class="gallery-item">
+                    <img src="pemandangan.jpeg" alt="Galeri Foto 8">
+                </div>
+                <div class="gallery-item">
+                    <img src="pball.jpeg" alt="Galeri Foto 9">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAKET WISATA PAGE -->
+<div id="paket" class="page">
+    <div class="container">
+        <h2 class="section-title">Paket Wisata</h2>
+        <p class="intro-text">
+            Pilih paket wisata sesuai kebutuhan Anda untuk pengalaman terbaik di D'Pongs
+        </p>
+
+        <div class="features-grid">
+
+            <div class="feature-box" style="background:#f8f9fa; color:#333;">
+                <h3>Paket Hemat</h3>
+                <div class="gallery-item">
+                    <img src="pahe.jpeg" alt="Paket Hemat">
+                </div>
+                <p>Tiket masuk + spot foto</p>
+                <p><strong>Harga: Rp 25.000</strong></p>
+            </div>
+
+            <div class="feature-box" style="background:#f8f9fa; color:#333;">
+                <h3>Paket Keluarga</h3>
+                <div class="gallery-item">
+                    <img src="pakel.jpeg" alt="Paket Keluarga">
+                </div>
+                <p>Tiket masuk + wahana keluarga</p>
+                <p><strong>Harga: Rp 75.000</strong></p>
+            </div>
+
+            <div class="feature-box" style="background:#f8f9fa; color:#333;">
+                <h3>Paket Lengkap</h3>
+                <div class="gallery-item">
+                    <img src="pakleng.jpeg" alt="Paket Lengkap">
+                </div>
+                <p>Semua wahana + kuliner</p>
+                <p><strong>Harga: Rp 120.000</strong></p>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+    <!-- KONTAK PAGE -->
+    <div id="kontak" class="page">
+        <div class="container">
+            <h2 class="section-title">Hubungi Kami</h2>
+            <p class="intro-text">Ada pertanyaan atau ingin berkunjung? Jangan ragu untuk menghubungi kami!</p>
+            
+            <div class="contact-content">
+                <div class="contact-form">
+                    <h3 style="margin-bottom: 1.5rem; color: #667eea;">Kirim Pesan</h3>
+                    <form>
+                        <div class="form-group">
+                            <label>Nama Lengkap</label>
+                            <input type="text" placeholder="Masukkan nama Anda" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" placeholder="nama@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Nomor Telepon</label>
+                            <input type="tel" placeholder="08xxxxxxxxxx">
+                        </div>
+                        <div class="form-group">
+                            <label>Pesan</label>
+                            <textarea placeholder="Tulis pesan Anda di sini..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn" style="width: 100%;">Kirim Pesan</button>
+                    </form>
+                </div>
+
+                <div class="contact-info">
+                    <div class="info-box">
+                        <h3>📍 Alamat</h3>
+                        <p>Jl. Pongangan, Kec.Gn. Pati<br>Kota Semarang, Provinsi Jawa Tengah 50229</p>
+                        <div class="map-container" style="margin-top:2rem;">
+  <iframe
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3952.7775856977687!2d110.40812851477717!3d-7.015763494889644!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e708b2a1cd8fb89%3A0xa5cfb02e0fc85673!2sD'Pongs%20Wisata%20Keluarga%20Semarang!5e0!3m2!1sid!2sid!4v1704881692885!5m2!1sid!2sid"
+    width="100%"
+    height="350"
+    style="border:0; border-radius: 10px;"
+    allowfullscreen=""
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade">
+  </iframe>
+</div>
+                    </div>
+                    <div class="info-box">
+    <h3>📸 Instagram</h3>
+    <p>
+        <a href="https://www.instagram.com/dpongs.restooutbound"
+           target="_blank"
+           style="color:#667eea; text-decoration:none; font-weight:600;">
+           @dpongs.restooutbound
+        </a>
+    </p>
+</div>
+                    <div class="info-box">
+                        <h3>🕐 Jam Operasional</h3>
+                        <p>Senin - Jumat: 09.00 - 17.00<br>Sabtu - Minggu: 09.00 - 17.00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <h3>D'Pongs</h3>
+            <p>Instagram: @dpongs.restooutbound</p>
+            <p>&copy; 2025 D'Pongs. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            document.getElementById(pageId).classList.add('active');
+            
+            const activeLink = Array.from(navLinks).find(link => 
+                link.getAttribute('onclick').includes(pageId)
+            );
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+            
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>
